@@ -33,7 +33,8 @@ export const PopupBtn=styled.button`
   position: absolute;
   top: 20px; 
   right: 30px;
-  font-size:28px;
+  font-size:12px;
+  color:#d7dfe9;
   font-weight:bold;
 `;
 export const SearchResult=styled.div`

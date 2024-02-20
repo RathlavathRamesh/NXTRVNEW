@@ -1,6 +1,6 @@
 import { Component } from "react"; 
 import ThemeContext from "../../context/ThemeContext";
-import {MenubarCard,HeadingElement,IconsCard,Icons} from './styledComponent'
+import {MenubarCard,HeadingElement,IconsCard,Icons,MenubarItems} from './styledComponent'
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import { MdHome } from "react-icons/md";
 import { FaFire } from "react-icons/fa";
@@ -14,8 +14,8 @@ class Menubar extends Component{
                 const {blacktheme}=value;
                 return (
                     <MenubarCard isBlack={blacktheme}>
-                        <div>
-                       <Link to="/">
+                        <MenubarItems>
+                        <Link to="/">
                        <IconsCard>
                         <Icons isblack={blacktheme}> <MdHome/></Icons>
                         <HeadingElement isBlack={blacktheme}>Home</HeadingElement>
@@ -39,7 +39,7 @@ class Menubar extends Component{
                         <HeadingElement isBlack={blacktheme}>Saved Videos</HeadingElement>
                         </IconsCard>
                        </Link>
-                        </div>
+                        </MenubarItems>
                         <HeadingElement >This is Logos Card </HeadingElement>
                     </MenubarCard>
                 )

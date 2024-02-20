@@ -1,15 +1,13 @@
 import styled from "styled-components";
 
 export const MenubarCard=styled.div`
-   height:90vh;
    display:flex;
    flex-direction:column;
    justify-content:space-between;
    position:fixed;
    top:95px;
    left:0;
- 
-   height:100vh;
+   height:87vh;
    background-color: ${prop=> prop.isBlack===true? "#424242":"white"};
    width:20vw;
    @media (max-width: 768px) {
@@ -34,4 +32,8 @@ export const IconsCard=styled.div`
    font-size:20px;
    color:${prop=>prop.isBlack===true?"white":"#64748b"};
    margin:1vh;
+ `
+ export const MenubarItems=styled.div`
+      display:flex;
+      flex-direction:column;
  `
