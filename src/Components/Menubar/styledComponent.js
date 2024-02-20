@@ -5,9 +5,9 @@ export const MenubarCard=styled.div`
    flex-direction:column;
    justify-content:space-between;
    position:fixed;
-   top:95px;
+   top:14vh;
    left:0;
-   height:87vh;
+   height:88vh;
    background-color: ${prop=> prop.isBlack===true? "#424242":"white"};
    width:20vw;
    @media (max-width: 768px) {

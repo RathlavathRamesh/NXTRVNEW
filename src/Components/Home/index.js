@@ -3,18 +3,23 @@ import Header from "../Header";
 import ThemeContext from "../../context/ThemeContext";
 import { IoMdSearch } from "react-icons/io";
 import Menubar from "../Menubar";
+import { TailSpin } from "react-loader-spinner";
 import VideoItem from "../VideoItem";
-import {BackgroundBanner,LogoImage,Heading,GetitNowButton,BottomCard,HomeItems,SearchResult,SearchBarContainer,SearchInput,SearchIcon, PopupBtn} from './styledComponent'
+import {BackgroundBanner,LogoImage,Heading,GetitNowButton,BottomCard,HomeItems,SearchResult,SearchBarContainer,SearchInput,SearchIcon,ReactLoaderContaner,NoresultsFound, PopupBtn,VideoItemsCard,FailedContaner} from './styledComponent'
 import Cookies from "js-cookie";
 import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
 
 class Home extends Component {
-    state ={searchVal:"",fetchedData:[],popup:true}
+    state ={searchVal:"",fetchedData:[],popup:true,isLoading:false,failed:false}
 
     getSearchVal=(event)=>{
       this.setState({searchVal:event.target.value})
     }
     getProductDetails=async()=>{
+      this.setState({
+        isLoading: true,
+      })
+
       const {searchVal}=this.state; 
       const apiUrl=`https://apis.ccbp.in/videos/all?search=${searchVal}` 
       const jwtToken=Cookies.get("jwt_token");
@@ -40,7 +45,10 @@ class Home extends Component {
             }
           }
         ))
-        this.setState({fetchedData:finalArrayList})
+        this.setState({fetchedData:finalArrayList,isLoading:false})
+      }
+      else{
+        this.setState({isLoading:false,failed:true})
       }
     }
     handleKeyPress = (event) => {
@@ -58,8 +66,19 @@ class Home extends Component {
         this.setState({popup:false});
       else this.setState({popup:true})
     }
+    
+    renderLoader=()=>{
+      return (
+        <ReactLoaderContaner>
+          <div className="products-loader-container">
+       <TailSpin color="red" height={40} width={40}/>
+    </div>
+        </ReactLoaderContaner>
+      )
+    }
+
     render(){
-      const {searchVal,fetchedData}=this.state
+      const {searchVal,fetchedData,isLoading,failed,popup}=this.state
       const jwtToken=Cookies.get("jwt_token");
       if(jwtToken===undefined){
          return <Redirect to="/Login"/>
@@ -84,14 +103,29 @@ class Home extends Component {
                     <GetitNowButton>Get It Now</GetitNowButton>
                   </BackgroundBanner>
                   }
-                      <SearchResult isBlack={blacktheme}>
+                      <SearchResult isBlack={blacktheme} pop={popup}>
                       <SearchBarContainer theme={blacktheme}>
                           <SearchInput theme={blacktheme} type="text" value={searchVal} onChange={this.getSearchVal}  onKeyPress={this.handleKeyPress} placeholder="Search  Here..." />
                           <SearchIcon theme={blacktheme} onClick={this.getProductDetails} ><IoMdSearch /></SearchIcon>
                         </SearchBarContainer>
-                      {fetchedData.length>0 &&(
-                        <VideoItem Item={fetchedData[0]} key={fetchedData[0].id}/>
-                        )}
+                     
+                       <VideoItemsCard> 
+                       {isLoading===true &&(
+                        this.renderLoader() 
+                      )}
+                      {fetchedData.length>0? (
+                        fetchedData.map((each)=>(
+                          <VideoItem Item={each} key={each.id}/>
+                         ))
+                        ):(
+                        <NoresultsFound>
+                          Hii
+                        </NoresultsFound>)
+                        }
+                      {failed===true && (
+                        <FailedContaner>Opps</FailedContaner>
+                      )}
+                       </VideoItemsCard> 
                       </SearchResult>
                     </HomeItems>
                 </BottomCard>
